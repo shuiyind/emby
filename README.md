@@ -63,7 +63,7 @@ python main.py
 **a. 找到 Emby 的自定义 CSS 设置**
 
 1.  登录您的 Emby 服务器，进入“控制台”。
-2.  在左侧菜单中找到“品牌”或“Branding”选项。
+2.  在左侧菜单中找到“Emby server - 通用”选项。
 3.  在“自定义CSS”或“Custom CSS”文本框中，您可以粘贴 CSS 代码。
 
 **b. 应用 CSS**
