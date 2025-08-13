@@ -1,0 +1,184 @@
+/*
+ * Emby 自定义 CSS 优化版本
+ * 重点解决特定按钮元素内的长标题换行问题
+ */
+
+/* --- 1. 字体引入 (CDN 链接) --- */
+
+/* 思源宋体 (Noto Serif SC) CDN 链接来自 fonts.loli.net */
+/* 这个 @import 规则会加载 Noto Serif SC 的 400, 500, 600, 700 字重 */
+@import url('https://fonts.loli.net/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap');
+
+/* 霞鹜文楷 (LXGW WenKai Light) CDN 链接 */
+@import url('https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css');
+
+/* 如果你还需要思源黑体 (Noto Sans SC)，可以取消下面这行的注释 */
+/* @import url('https://fonts.loli.net/css2?family=Noto+Sans+SC:wght@400;500;600;700&display=swap'); */
+
+
+/* --- 2. 字幕样式优化（修改字体为霞鹜文楷 Light）--- */
+.emby-subtitle-text,
+div[style*="font-size: 1em; text-shadow:"],
+div[style*="text-align: center; white-space: pre-line;"] > div[style*="padding: 0.08em 0.5em;"] {
+    font-family: "LXGW WenKai", "Source Han Serif SC", "Noto Serif CJK SC", "SimSun", "KaiTi", "Microsoft YaHei", Arial, serif !important;
+    /* >>>>>>>>>>>>> 调整【字幕】默认字大小（所有屏幕通用）<<<<<<<<<<<<< */
+    /* clamp(最小值, 优先值, 最大值) */
+    /* 示例：将最小尺寸调大，优先值调小，最大尺寸调小 */
+    /* font-size: clamp(26px, 3vw, 40px) !important; */
+    font-size: clamp(24px, 3.5vw, 42px) !important;
+    /* >>>>>>>>>>>>> 调整【字幕】默认字大小结束 <<<<<<<<<<<<< */
+    color: #FFFFFF !important;
+    text-shadow:
+        -1px -1px 0px rgba(0, 0, 0, 0.5),
+        1px -1px 0px rgba(0, 0, 0, 0.5),
+        -1px 1px 0px rgba(0, 0, 0, 0.5),
+        1px 1px 0px rgba(0, 0, 0, 0.5),
+        0 0 8px rgba(255, 200, 220, 0.6),
+        0 0 15px rgba(255, 200, 220, 0.4) !important;
+    font-weight: 300 !important; /* 设置为 Light 字重 */
+    line-height: 1.4 !important;
+    letter-spacing: 0.01em !important;
+    bottom: clamp(5%, 7vw, 10%) !important;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    padding: 4px 8px;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode .emby-subtitle-text,
+body.dark-mode div[style*="font-size: 1em; text-shadow:"] {
+    text-shadow:
+        -1px -1px 0px rgba(255, 255, 255, 0.5),
+        1px -1px 0px rgba(255, 255, 255, 0.5),
+        -1px 1px 0px rgba(255, 255, 255, 0.5),
+        1px 1px 0px rgba(255, 255, 255, 0.5),
+        0 0 8px rgba(255, 255, 255, 0.4),
+        0 0 15px rgba(255, 255, 255, 0.2) !important;
+}
+
+.emby-subtitle-text:hover {
+    transform: scale(1.02);
+}
+
+@media (min-width: 1200px) {
+    .emby-subtitle-text {
+        /* >>>>>>>>>>>>> 调整【大屏幕下字幕】字大小（当屏幕宽度大于1200px时）<<<<<<<<<<<<< */
+        /* 示例：在大屏幕上将字体固定为48px */
+        /* font-size: 48px !important; */
+        font-size: clamp(28px, 3vw, 46px) !important;
+        /* >>>>>>>>>>>>> 调整【大屏幕下字幕】字大小结束 <<<<<<<<<<<<< */
+    }
+}
+
+@media (max-width: 768px) {
+    .emby-subtitle-text {
+        /* >>>>>>>>>>>>> 调整【小屏幕下字幕】字大小（当屏幕宽度小于768px时）<<<<<<<<<<<<< */
+        /* 示例：在小屏幕上将字体固定为20px */
+        /* font-size: 20px !important; */
+        font-size: clamp(20px, 4vw, 32px) !important;
+        /* >>>>>>>>>>>>> 调整【小屏幕下字幕】字大小结束 <<<<<<<<<<<<< */
+    }
+}
+
+---
+
+/* --- 3. 标题显示优化（针对特定按钮元素强化）--- */
+
+/* 针对您提供的 <button> 元素及其常见标题类，强制换行并限制行数 */
+/* 提高了选择器特异性，并强制了关键的显示和布局属性 */
+.cardMediaInfoItem.textActionButton.cardTextActionButton, /* 精准定位到您提供的按钮元素 */
+.cardText,
+.itemName,
+.listItemBody .itemName,
+.cardFooter .cardText,
+.mediaSourceInfo .itemName,
+.detail-page-info-primary .itemName,
+.listStatic .itemName,
+.albumPoster .itemName,
+.folderPoster .itemName,
+.personSquare .itemName,
+.square .itemName,
+h1.name,
+h2.name,
+h3.name,
+h4.name {
+    /* 核心换行和多行显示属性 */
+    display: -webkit-box !important; /* 强制使用 flexbox for line-clamp */
+    -webkit-line-clamp: 3 !important; /* 允许显示 3 行 */
+    -webkit-box-orient: vertical !important; /* 垂直方向 */
+    white-space: normal !important; /* 强制允许文本换行 */
+    overflow: hidden !important; /* 隐藏溢出内容 */
+    text-overflow: ellipsis !important; /* 显示省略号 */
+
+    /* 移除所有可能导致单行的高度或宽度限制，让其自适应 */
+    height: auto !important;
+    min-height: unset !important;
+    max-height: unset !important;
+    width: auto !important; /* 确保宽度不受限制，能填满容器以换行 */
+    min-width: unset !important;
+    max-width: unset !important;
+
+    /* 额外的安全措施：可能影响内联块元素的对齐方式，但有助于换行 */
+    box-sizing: border-box !important;
+    word-wrap: break-word !important; /* 强制在单词内换行 */
+    word-break: break-all !important; /* 强制在任何字符处换行，避免超长英文单词导致溢出 */
+}
+
+/* 针对页面主标题，确保其完全显示并换行 */
+.pageTitle {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    max-width: 100% !important;
+    height: auto !important;
+}
+
+/* 在大屏幕上允许标题显示更多行 */
+@media (min-width: 1200px) {
+    .cardMediaInfoItem.textActionButton.cardTextActionButton,
+    .cardText,
+    .itemName,
+    .listItemBody .itemName,
+    .cardFooter .cardText,
+    .mediaSourceInfo .itemName,
+    .detail-page-info-primary .itemName,
+    .listStatic .itemName,
+    .albumPoster .itemName,
+    .folderPoster .itemName,
+    .personSquare .itemName,
+    .square .itemName,
+    h1.name,
+    h2.name,
+    h3.name,
+    h4.name {
+        -webkit-line-clamp: 4 !important; /* 大屏幕上允许显示 4 行 */
+        max-height: unset !important;
+    }
+}
+
+/* >>>>>>>>>>>>> 调整【所有标题、项目名称、页面标题】的字大小 <<<<<<<<<<<<< */
+h1.name,
+h2.name,
+h3.name,
+h4.name,
+.itemName,
+.pageTitle {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', 'Source Han Sans SC', 'Source Han Serif SC', 'Noto Serif CJK SC', 'SimSun', 'KaiTi', Arial, serif !important;
+    /* 在这里添加或修改 font-size 属性 */
+    /* 示例：将所有标题字大小调整为默认的 1.1 倍 */
+    /* font-size: 1.1em !important; */
+    /* 示例：将所有标题字大小固定为 20px */
+    /* font-size: 20px !important; */
+}
+/* >>>>>>>>>>>>> 调整【所有标题、项目名称、页面标题】的字大小结束 <<<<<<<<<<<<< */
+
+/* >>>>>>>>>>>>> 调整【正文、描述、按钮文本等通用文本】的字大小 <<<<<<<<<<<<< */
+body, p, .cardText {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', 'Source Han Sans SC', 'Source Han Serif SC', 'Noto Serif CJK SC', 'SimSun', 'KaiTi', Arial, serif !important;
+    /* 在这里添加或修改 font-size 属性 */
+    /* 示例：将正文字大小调整为默认的 0.95 倍 */
+    /* font-size: 0.95em !important; */
+    /* 示例：将正文字大小固定为 14px */
+    /* font-size: 14px !important; */
+}
+/* >>>>>>>>>>>>> 调整【正文、描述、按钮文本等通用文本】的字大小结束 <<<<<<<<<<<<< */
